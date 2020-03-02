@@ -5,6 +5,7 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+
 app = Flask(__name__)
 
 # Check for environment variable
@@ -19,7 +20,7 @@ Session(app)
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
-
+from models import *
 
 @app.route("/")
 def index():
@@ -27,6 +28,11 @@ def index():
 
 @app.route("/signon", methods=["GET","POST"])
 def signon():
+    #If user is signing on, check if username already in use, otherwise, add user
+    # to database.
     if(request.method=="POST"):
-        print(request.form['username'], request.form['email'], request.form['password'])
+        user = User(username=request.form['username'], password=request.form['password'],
+        email=request.form['email'])
+        db.add(user)
+        db.commit()
     return render_template("signon.html")

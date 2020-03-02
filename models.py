@@ -1,4 +1,4 @@
-from app import db
+from application import db
 
 #Define User data model.
 class User(db.Model):

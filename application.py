@@ -24,3 +24,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/signon")
+def signon():
+    return render_template("signon.html")

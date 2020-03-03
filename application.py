@@ -20,7 +20,7 @@ Session(app)
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
-from models import *
+
 
 @app.route("/")
 def index():
@@ -31,8 +31,18 @@ def signon():
     #If user is signing on, check if username already in use, otherwise, add user
     # to database.
     if(request.method=="POST"):
-        user = User(username=request.form['username'], password=request.form['password'],
-        email=request.form['email'])
-        db.add(user)
-        db.commit()
+        #first check if user is in databse, if so, ask user to sign in instead
+        user = db.execute("SELECT * FROM users WHERE username = :u", {"u":request.form['username']}).fetchone()
+
+        if(user):
+            #if user exists, ask user to signin
+            return render_template("signin.html", username = request.form['username'])
+        else:
+            #If user does not exist, add user to database.
+            db.execute("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)",
+            {"username":request.form['username'], "email":request.form['email'],"password":request.form['password']})
+            print("added user")
+            db.commit()
+            return render_template("signin.html")
+
     return render_template("signon.html")

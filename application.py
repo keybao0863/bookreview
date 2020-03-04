@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, flash
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -46,3 +46,37 @@ def signon():
             return render_template("signin.html")
 
     return render_template("signon.html")
+
+@app.route("/signin", methods=["GET","POST"])
+def signin():
+    #Check if user exists and if password match
+    if(request.method=="POST"):
+        username = request.form['username'];
+        user = db.execute("SELECT * FROM users WHERE username = :u",
+        {"u":request.form['username']}).fetchone()
+
+        #check if user exists.
+        if(user):
+            input_password = request.form['password'];
+             #If user exists,check if password matches
+            if(user.password==input_password):
+                #If password is correct, log user_id in session.
+                session['logged_in'] = True
+                session['used_id'] = user.id
+                print("logged in")
+                return render_template("index.html")
+            else:
+                #If password is not correct, return to signin page.
+                print("Password not correct")
+                return render_template("signin.html")
+        else:
+            print("User does not exist.")
+            return render_template("signin.html")
+    else:
+        return render_template("signin.html")
+
+@app.route("/logoff")
+def logoff():
+    session['logged_in'] = False
+    session['user_id'] = None
+    return index();

@@ -60,9 +60,23 @@
         <li><a href="#">Projects</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
+
+      {% if 'user_id' in session%}
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="/logoff"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
       </ul>
+      {% endif %}
+      
+      {% if 'user_id' not in session%}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/signin"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/signon"><span class="glyphicon glyphicon-user"></span> Signon</a></li>
+      </ul>
+      {% endif %}
+
+
     </div>
   </div>
 </nav>
@@ -75,6 +89,20 @@
       <p><a href="#">Link</a></p>
     </div>
     <div class="col-sm-8 text-left">
+
+      <div class="container" style="min-height:100% width:80%">
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+	    {% for message in messages %}
+		  <div class="alert alert-warning alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+			{{message}}
+		  </div>
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
+</div>
+
       <h1>{% block heading %} {% endblock %}</h1>
       {% block body %}
       {% endblock %}

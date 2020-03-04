@@ -43,7 +43,7 @@ def signon():
             #If user does not exist, add user to database.
             db.execute("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)",
             {"username":request.form['username'], "email":request.form['email'],"password":request.form['password']})
-            print("added user")
+            flash("added user")
             db.commit()
             return render_template("signin.html")
 
@@ -51,7 +51,6 @@ def signon():
 
 @app.route("/signin", methods=["GET","POST"])
 def signin():
-    
     #Check if user exists and if password match
     if(request.method=="POST"):
         username = request.form['username'];
@@ -64,20 +63,20 @@ def signin():
              #If user exists,check if password matches
             if(user.password==input_password):
                 #If password is correct, log user_id in session.
-                session['used_id'] = user.id
-                print("logged in")
+                session['user_id'] = user.id
+                flash("you are logged in")
                 return render_template("index.html")
             else:
                 #If password is not correct, return to signin page.
-                print("Password not correct")
+                flash("Password not correct")
                 return render_template("signin.html")
         else:
-            print("User does not exist.")
+            flash("User does not exist.")
             return render_template("signin.html")
     else:
         return render_template("signin.html")
 
 @app.route("/logoff")
 def logoff():
-    session['user_id'] = None
+    session.pop('user_id', None)
     return index();

@@ -7,6 +7,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(12)
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -16,6 +17,7 @@ if not os.getenv("DATABASE_URL"):
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
 
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
@@ -49,6 +51,7 @@ def signon():
 
 @app.route("/signin", methods=["GET","POST"])
 def signin():
+    
     #Check if user exists and if password match
     if(request.method=="POST"):
         username = request.form['username'];
@@ -61,7 +64,6 @@ def signin():
              #If user exists,check if password matches
             if(user.password==input_password):
                 #If password is correct, log user_id in session.
-                session['logged_in'] = True
                 session['used_id'] = user.id
                 print("logged in")
                 return render_template("index.html")
@@ -77,6 +79,5 @@ def signin():
 
 @app.route("/logoff")
 def logoff():
-    session['logged_in'] = False
     session['user_id'] = None
     return index();

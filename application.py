@@ -65,7 +65,7 @@ def signin():
                 #If password is correct, log user_id in session.
                 session['user_id'] = user.id
                 flash("you are logged in")
-                return render_template("index.html")
+                return render_template("search.html")
             else:
                 #If password is not correct, return to signin page.
                 flash("Password not correct")
@@ -80,3 +80,18 @@ def signin():
 def logoff():
     session.pop('user_id', None)
     return index();
+
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    #Process POST request
+    if(request.method=="POST"):
+        # TODO:
+        print("search gets a post request")
+        return
+
+    #Check if the user is logged in, if not, ask the user to log in.
+    if('user_id' not in session):
+        return signin()
+    #If user has logged in, go to search page
+    else:
+        return render_template("search.html")

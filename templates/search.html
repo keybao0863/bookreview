@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  Book Search
+{% endblock %}
+
+{% block body %}
+  <label for="search-option">Search by: </label>
+  <select name="search-option" id="search-options" form='searchform'>
+    <option value="ISBN">ISBN</option>
+    <option value="Title">Title</option>
+    <option value="Author">Author</option>
+  </select>
+
+  <form action="{{url_for('search')}}" method="post" id='searchform'>
+    <input class="form-control" id="search-box" name="search-box" aria-describedby="search-box" placeholder="Enter ISBN, title or author of the book">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+{% endblock %}

@@ -8,7 +8,7 @@ CREATE TABLE users(
 CREATE TABLE books(
   id SERIAL PRIMARY KEY,
   isbn VARCHAR NOT NULL UNIQUE,
-  title VARCHAR NOT NULL UNIQUE,
+  title VARCHAR NOT NULL,
   author VARCHAR NOT NULL,
   year int
-)
+);

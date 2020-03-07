@@ -85,9 +85,18 @@ def logoff():
 def search():
     #Process POST request
     if(request.method=="POST"):
-        # TODO:
-        print("search gets a post request")
-        return
+        option = request.form['search_option'].lower()
+        #Search also for partially matched queries
+        query = '%' + request.form['search_box'].lower()
+        books = db.execute("SELECT * FROM books WHERE lower(" + option + ") LIKE :q",
+        {"o": option, "q":query}).fetchall()
+
+        #If no book is found, return an error, otherwise, display results
+        if(len(books)==0):
+            flash("No book match is found")
+            return render_template("search.html")
+
+        return render_template("search_result.html", books = books)
 
     #Check if the user is logged in, if not, ask the user to log in.
     if('user_id' not in session):

@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block body %}
-  <label for="search-option">Search by: </label>
-  <select name="search-option" id="search-options" form='searchform'>
-    <option value="ISBN">ISBN</option>
-    <option value="Title">Title</option>
-    <option value="Author">Author</option>
+  <label for="search_option">Search by: </label>
+  <select name="search_option" id="search_options" form='searchform'>
+    <option value="isbn">isbn</option>
+    <option value="title">title</option>
+    <option value="author">author</option>
   </select>
 
   <form action="{{url_for('search')}}" method="post" id='searchform'>
-    <input class="form-control" id="search-box" name="search-box" aria-describedby="search-box" placeholder="Enter ISBN, title or author of the book">
+    <input class="form-control" id="search_box" name="search_box" aria-describedby="search_box" placeholder="Enter ISBN, title or author of the book">
     <button type="submit" class="btn btn-primary">Search</button>
   </form>
 {% endblock %}

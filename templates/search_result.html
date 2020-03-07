@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  Book Search
+{% endblock %}
+
+{% block body %}
+  <h1>Search results</h1>
+  <ul>
+    {% for book in books%}
+      <li>
+        {{book.isbn}}, {{book.title}}, {{book.author}}, {{book.year}}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -12,18 +12,33 @@
     <li>Year published: {{book.year}}</li>
   </ul>
 
-  <form action="{{url_for('review',book_id=book.id)}}" method="post">
-    <label for="rating">Rate: </label>
-    <select name="rating" id="rating">
-      <option value=1>1</option>
-      <option value=2>2</option>
-      <option value=3>3</option>
-      <option value=4>4</option>
-      <option value=5>5</option>
-    </select>
+  <div class="reviews">
+    <p>Reviews from Goodreads</p>
+    <p>Average rating: {{avg_rating}}  Number of ratings: {{rating_number}}</p>
+    <p>Reviews left by users on this site:</p>
+    <ul>
+    {% for review in reviews %}
+      <li>User {{review.user_id}} rated this book {{review.rating}} and said {{review.review}}</li>
+    {% endfor %}
+    </ul>
+  </div>
 
-    <input class="form-control" id="review" name="review" aria-describedby="review"
-    placeholder="Please write your review" autocomplete="off">
-    <button type="submit" class="btn btn-primary">Submit review</button>
-  </form>
+  <div id="review_box">
+    <p>Leave a review:</p>
+    <form action="{{url_for('review',book_id=book.id)}}" method="post">
+      <label for="rating">Rating: </label>
+      <select name="rating" id="rating">
+        <option value=1>1</option>
+        <option value=2>2</option>
+        <option value=3>3</option>
+        <option value=4>4</option>
+        <option value=5>5</option>
+      </select>
+
+      <input class="form-control" id="review" name="review" aria-describedby="review"
+      placeholder="Please write your review" autocomplete="off">
+      <button type="submit" class="btn btn-primary">Submit review</button>
+    </form>
+  </div>
+
 {% endblock %}

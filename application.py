@@ -1,5 +1,5 @@
 import os
-
+import requests
 from flask import Flask, session, render_template, request, flash
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -113,9 +113,18 @@ def book(book_id):
         return render_template("error.html", message = "Book does not exist")
 
     #If book exists, serve book info and reviews
+    reviews = db.execute("SELECT * FROM reviews WHERE book_id=:i",
+    {'i':book_id}).fetchall()
 
-    # TODO: get reviews
-    return render_template("book.html", book=book)
+    #Fetch Goodread info on this book.
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+    params={"key": "gy3IEXVW525F7FkXHjmXg", "isbns": book.isbn})
+    print(res.json())
+    avg_rating = res.json()["books"][0]["average_rating"]
+    rating_number = res.json()["books"][0]["work_ratings_count"]
+
+    return render_template("book.html", book=book, reviews= reviews, avg_rating=avg_rating,
+                            rating_number=rating_number)
 
 @app.route("/review/<int:book_id>", methods=['POST'])
 def review(book_id):
@@ -123,8 +132,17 @@ def review(book_id):
     if('user_id' not in session):
         return render_template("error.html", message= "You need to log in first.")
 
-    #Deposit review in databse
+    #Make sure user has not reviewed this book
     user_id = session['user_id']
+    user_reviewed = db.execute("SELECT user_id FROM reviews WHERE book_id = :book_id AND \
+    user_id = :user_id",
+    {'book_id':book_id, 'user_id':user_id}).fetchone();
+
+    if(user_reviewed is not None):
+        return render_template("error.html", message= "You have already reviewed this book.")
+
+    #Deposit review in databse
+
     rating = request.form['rating']
     review = request.form['review']
 

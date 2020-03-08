@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  Book information
+{% endblock %}
+
+{% block body %}
+  <ul>
+    <li>Book name: {{book.title}}</li>
+    <li>ISBN: {{book.isbn}}</li>
+    <li>Author: {{book.author}}</li>
+    <li>Year published: {{book.year}}</li>
+  </ul>
+
+  <form action="{{url_for('review',book_id=book.id)}}" method="post">
+    <label for="rating">Rate: </label>
+    <select name="rating" id="rating">
+      <option value=1>1</option>
+      <option value=2>2</option>
+      <option value=3>3</option>
+      <option value=4>4</option>
+      <option value=5>5</option>
+    </select>
+
+    <input class="form-control" id="review" name="review" aria-describedby="review"
+    placeholder="Please write your review" autocomplete="off">
+    <button type="submit" class="btn btn-primary">Submit review</button>
+  </form>
+{% endblock %}

@@ -55,9 +55,8 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
+        <li class="active"><a href="{{url_for('index')}}">Home</a></li>
+        <li><a href="{{url_for('search')}}">Search</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
 
@@ -66,7 +65,7 @@
         <li><a href="/logoff"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
       </ul>
       {% endif %}
-      
+
       {% if 'user_id' not in session%}
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/signin"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>

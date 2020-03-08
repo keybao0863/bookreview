@@ -12,3 +12,11 @@ CREATE TABLE books(
   author VARCHAR NOT NULL,
   year int
 );
+
+CREATE TABLE reviews(
+  id SERIAL PRIMARY KEY,
+  book_id INTEGER REFERENCES books,
+  user_id INTEGER REFERENCES users,
+  rating INTEGER NOT NULL,
+  review VARCHAR
+);

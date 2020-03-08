@@ -87,7 +87,7 @@ def search():
     if(request.method=="POST"):
         option = request.form['search_option'].lower()
         #Search also for partially matched queries
-        query = '%' + request.form['search_box'].lower()
+        query = '%' + request.form['search_box'].lower() + '%'
         books = db.execute("SELECT * FROM books WHERE lower(" + option + ") LIKE :q",
         {"o": option, "q":query}).fetchall()
 
@@ -104,3 +104,33 @@ def search():
     #If user has logged in, go to search page
     else:
         return render_template("search.html")
+
+@app.route("/books/<int:book_id>")
+def book(book_id):
+    #Make sure book exists
+    book = db.execute("SELECT * FROM books WHERE id = :i", {'i':book_id}).fetchone()
+    if book is None:
+        return render_template("error.html", message = "Book does not exist")
+
+    #If book exists, serve book info and reviews
+
+    # TODO: get reviews
+    return render_template("book.html", book=book)
+
+@app.route("/review/<int:book_id>", methods=['POST'])
+def review(book_id):
+    #Make sure user is logged on
+    if('user_id' not in session):
+        return render_template("error.html", message= "You need to log in first.")
+
+    #Deposit review in databse
+    user_id = session['user_id']
+    rating = request.form['rating']
+    review = request.form['review']
+
+    db.execute("INSERT INTO reviews (book_id, user_id, rating, review) VALUES \
+    (:book_id, :user_id, :rating, :review)", {'book_id':book_id, 'user_id': user_id,
+    'rating':rating, 'review': review})
+    db.commit()
+    flash("Reviewed successfully")
+    return book(book_id)

@@ -1,6 +1,7 @@
 import os
+import json
 import requests
-from flask import Flask, session, render_template, request, flash
+from flask import Flask, session, render_template, request, flash, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -152,3 +153,21 @@ def review(book_id):
     db.commit()
     flash("Reviewed successfully")
     return book(book_id)
+
+@app.route("/api/<string:isbn>")
+def api(isbn):
+    book = db.execute("SELECT * FROM books WHERE isbn = :i", {'i':isbn}).fetchone()
+    print(book.id)
+    #Make sure book exists.
+    if(book is None):
+        abort(404)
+
+    #Create Json object
+    review_count = db.execute("SELECT COUNT(*) FROM reviews WHERE book_id = :i",
+        {'i':book.id}).fetchone()[0]
+    avg_score = db.execute("SELECT AVG(rating) FROM reviews WHERE book_id = :i",
+        {'i':book.id}).fetchone()[0]
+    print(review_count, avg_score)
+
+    return jsonify(title=book.title, author=book.author, year=book.year,
+    isbn=book.isbn, review_count=review_count, average_score=avg_score)

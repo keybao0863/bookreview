@@ -114,7 +114,7 @@ def book(book_id):
         return render_template("error.html", message = "Book does not exist")
 
     #If book exists, serve book info and reviews
-    reviews = db.execute("SELECT * FROM reviews WHERE book_id=:i",
+    reviews = db.execute("SELECT * FROM reviews JOIN users ON reviews.user_id=users.id WHERE book_id=:i ",
     {'i':book_id}).fetchall()
 
     #Fetch Goodread info on this book.

@@ -13,18 +13,18 @@
   </ul>
 
   <div class="reviews">
-    <p>Reviews from Goodreads</p>
+    <h2>Reviews from Goodreads</h2>
     <p>Average rating: {{avg_rating}}  Number of ratings: {{rating_number}}</p>
-    <p>Reviews left by users on this site:</p>
+    <h2>Reviews left by users on this site:</h2>
     <ul>
     {% for review in reviews %}
-      <li>User {{review.user_id}} rated this book {{review.rating}} and said {{review.review}}</li>
+      <li>User {{review.username}} rated this book {{review.rating}} and said {{review.review}}</li>
     {% endfor %}
     </ul>
   </div>
 
   <div id="review_box">
-    <p>Leave a review:</p>
+    <h2>Leave a review:</h2>
     <form action="{{url_for('review',book_id=book.id)}}" method="post">
       <label for="rating">Rating: </label>
       <select name="rating" id="rating">

@@ -171,6 +171,3 @@ def api(isbn):
 
     return jsonify(title=book.title, author=book.author, year=book.year,
     isbn=book.isbn, review_count=review_count, average_score=avg_score)
-
-if __name__ == '__main__':
-    main()

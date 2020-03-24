@@ -1,1 +1,1 @@
-web: python -b 0.0.0.0:$PORT application:app --log-file=-
+web: python src.app:app --log-file=-

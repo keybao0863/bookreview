@@ -1,1 +1,1 @@
-web: python src.app:app --log-file=-
+web: python application.py

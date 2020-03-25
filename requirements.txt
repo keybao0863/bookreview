@@ -4,3 +4,5 @@ psycopg2-binary
 SQLAlchemy
 simplejson
 requests
+gunicorn
+Werkzeug==0.16.0
